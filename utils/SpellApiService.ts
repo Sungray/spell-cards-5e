@@ -1,3 +1,4 @@
+import path from 'path';
 import { SchoolOfMagic } from "./constants";
 import { SpellType, SrdType  } from "./models";
 
