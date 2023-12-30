@@ -131,8 +131,15 @@ const SpellApiService = {
     const castingTime = spellData.time.map((t: TimeType) => `${t.number} ${t.unit}`).join(", ");
     const higherLevelDesc = spellData.entriesHigherLevel?.map((e: HigherLevelEntryType) => e.entries.join("\n")).join("\n") || '';
 
-    // Build the SpellType object
-    return {
+    console.log("Converting spell:", spellData.name);
+    console.log("School of Magic:", schoolOfMagic);
+    console.log("Components:", components);
+    console.log("Range:", range);
+    console.log("Duration:", duration);
+    console.log("Casting Time:", castingTime);
+    console.log("Higher Level Description:", higherLevelDesc);
+
+    const convertedSpell = {
       name: spellData.name,
       level: spellData.level,
       schoolOfMagic,
@@ -143,10 +150,13 @@ const SpellApiService = {
       castingTime,
       ritual: spellData.ritual || false,
       concentration: spellData.concentration || false,
-      damageAtCharacterLevel: {}, // Requires specific handling based on your JSON structure
+      damageAtCharacterLevel: {}, // This needs specific handling
       components,
-      descSize: 9 // Default value
+      descSize: 9
     };
+
+    console.log("Converted Spell:", convertedSpell);
+    return convertedSpell;
 
   },
   
