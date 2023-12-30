@@ -120,14 +120,14 @@ const SpellApiService = {
   convert5eToolSpell(spellData: any): SpellType {
     // School of Magic mapping
     const schoolMapping = {
-      'T': SchoolOfMagic.Transmutation,
-      'N': SchoolOfMagic.Necromancy,
-      'C': SchoolOfMagic.Conjuration,
-      'A': SchoolOfMagic.Abjuration,
-      'E': SchoolOfMagic.Enchantment,
-      'V': SchoolOfMagic.Evocation,
-      'I': SchoolOfMagic.Illusion,
-      'D': SchoolOfMagic.Divination,
+      'T': SchoolOfMagic.transmutation,
+      'N': SchoolOfMagic.necromancy,
+      'C': SchoolOfMagic.conjuration,
+      'A': SchoolOfMagic.abjuration,
+      'E': SchoolOfMagic.enchantment,
+      'V': SchoolOfMagic.evocation,
+      'I': SchoolOfMagic.illusion,
+      'D': SchoolOfMagic.divination,
     };
   
     // Components mapping
