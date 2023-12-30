@@ -17,6 +17,8 @@ const SpellApiService = {
   },
 
   get: async (spellName: string): Promise<SpellType> => {
+    
+    console.log("USE_5ETOOLS value is:", process.env.USE_5ETOOLS);
     const apiUrl = process.env.USE_5ETOOLS === 'true' 
       ? `http://localhost:3000/api/spells?spellName=${encodeURIComponent(spellName)}` 
       : `https://www.dnd5eapi.co/api/spells/${spellName}`;
