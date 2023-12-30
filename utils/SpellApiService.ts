@@ -146,7 +146,7 @@ const SpellApiService = {
     return {
       name: spellData.name ?? 'Unknown Name',
       level: spellData.level ?? 0,
-      schoolOfMagic: schoolMapping[spellData.school] ?? SchoolOfMagic.Unknown,
+      schoolOfMagic: schoolMapping[spellData.school] ?? SchoolOfMagic.other,
       desc: spellData.entries?.join("\n") ?? '',
       higherLevelDesc: spellData.entriesHigherLevel?.map(e => e.entries.join("\n")).join("\n") ?? '',
       range: range,
