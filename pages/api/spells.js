@@ -6,12 +6,19 @@ const readSpellsFromDirectory = (dirPath) => {
   try {
     const files = fs.readdirSync(dirPath);
     files.forEach(file => {
-      if (file.endsWith('.json')) {
+      if (file.startsWith('spells-') && file.endsWith('.json')) {
         const filePath = path.join(dirPath, file);
         const fileContents = fs.readFileSync(filePath, 'utf8');
         const spellData = JSON.parse(fileContents);
         if (spellData.spell && Array.isArray(spellData.spell)) {
-          spells.push(...spellData.spell);
+          spellData.spell.forEach(spell => {
+            const index = spell.name.toLowerCase().replace(/\s+/g, '-');
+            spells.push({
+              ...spell,
+              index: index,
+              url: `/api/spells/${index}`
+            });
+          });
         }
       }
     });
