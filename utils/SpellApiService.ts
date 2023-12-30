@@ -16,6 +16,11 @@ interface TimeType {
   unit: string;
 }
 
+interface HigherLevelEntryType {
+  entries: string[];
+}
+
+
 const getConfig = async () => {
   const response = await fetch('/api/config');
   return response.json();
@@ -128,7 +133,7 @@ const SpellApiService = {
       level: spellData.level,
       schoolOfMagic,
       desc: spellData.entries.join("\n"),
-      higherLevelDesc: spellData.entriesHigherLevel?.map(e => e.entries.join("\n")).join("\n") || '',
+      const higherLevelDesc = spellData.entriesHigherLevel?.map((e: HigherLevelEntryType) => e.entries.join("\n")).join("\n") || '';
       range,
       duration,
       castingTime,
