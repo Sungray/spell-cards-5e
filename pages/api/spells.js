@@ -33,6 +33,12 @@ export default function handler(req, res) {
   const customSpellsDir = path.join('/usr/src/app', 'custom-spells');
   const spells = [...readSpellsFromDirectory(spellsDir), ...readSpellsFromDirectory(customSpellsDir)];
 
+  // Format the response to include count and results
+  const formattedResponse = {
+    count: spells.length,
+    results: spells
+  };
+
   const spellIndex = req.query.index;
   if (spellIndex) {
     const spell = spells.find(s => s.index === spellIndex);
@@ -42,6 +48,6 @@ export default function handler(req, res) {
       res.status(404).json({ error: 'Spell not found' });
     }
   } else {
-    res.status(200).json(spells);
+    res.status(200).json(formattedResponse);
   }
 }
