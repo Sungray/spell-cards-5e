@@ -117,7 +117,7 @@ const SpellApiService = {
     return SpellApiService.convert(json);
   },
 
-  convert5eToolSpell = (spellData: any): SpellType => {
+  convert5eToolSpell(spellData: any): SpellType {
     // School of Magic mapping
     const schoolMapping = {
       'T': SchoolOfMagic.Transmutation,
