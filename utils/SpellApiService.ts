@@ -25,27 +25,29 @@ const SpellApiService = {
     }
   },
 
-   readSpellsFromDirectory = (dirPath: string): SpellType[] => {
-      let spells: SpellType[] = [];
-      try {
-        const files = fs.readdirSync(dirPath);
+  readSpellsFromDirectory = (dirPath: string): SpellType[] => {
+    let spells: SpellType[] = [];
+    try {
+      const files = fs.readdirSync(dirPath);
   
-        files.forEach(file => {
-          if (file.endsWith('.json')) {
-            const filePath = path.join(dirPath, file);
-            const fileContent = fs.readFileSync(filePath, 'utf8');
-            const spellData = JSON.parse(fileContent);
+      files.forEach(file => {
+        if (file.endsWith('.json')) {
+          const filePath = path.join(dirPath, file);
+          const fileContent = fs.readFileSync(filePath, 'utf8');
+          const spellData = JSON.parse(fileContent);
   
-            if (Array.isArray(spellData)) {
-              spells.push(...spellData.map((data: any) => this.convert5eToolSpell(data))); 
-            }
+          if (Array.isArray(spellData)) {
+            // Filter out undefined elements and then map
+            spells.push(...spellData.filter(data => data !== undefined).map((data: any) => this.convert5eToolSpell(data)));
           }
-        });
-      } catch (err) {
-        console.error(`Error reading spells from directory ${dirPath}:`, err);
-      }
-      return spells;
-    };
+        }
+      });
+    } catch (err) {
+      console.error(`Error reading spells from directory ${dirPath}:`, err);
+    }
+    return spells;
+  };
+
 
 
   readLocalSpells = (): SrdSpellsReponse => {
