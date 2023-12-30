@@ -83,33 +83,44 @@ const SpellApiService = {
       'I': SchoolOfMagic.illusion,
       'D': SchoolOfMagic.divination,
     };
+    const schoolOfMagic = schoolMapping[spellData.school] || SchoolOfMagic.other;
   
-    // Components mapping
+    // Handling components
     const components = {
-      verbal: spellData.components?.v ?? false,
-      somatic: spellData.components?.s ?? false,
-      material: !!spellData.components?.m,
-      materialDesc: spellData.components?.m ?? ''
+      verbal: spellData.components.v || false,
+      somatic: spellData.components.s || false,
+      material: spellData.components.m ? true : false,
+      materialDesc: spellData.components.m || ''
     };
   
-    // Convert range
-    const range = spellData.range?.type === 'point' && spellData.range.distance ?
-      `${spellData.range.distance.amount ?? ''} ${spellData.range.distance.type}` : 
-      'Varies';
-  
+    // Convert range, duration, casting time
+    const range = spellData.range.distance ? `${spellData.range.distance.amount} ${spellData.range.distance.type}` : 'Varies';
+    let range = 'Varies';
+    if (spellData.range) {
+        if (spellData.range.type === 'point' && spellData.range.distance) {
+            range = `${spellData.range.distance.amount ?? ''} ${spellData.range.distance.type}`;
+        } else if (spellData.range.type) {
+            range = spellData.range.type; // If the range is a special type like 'Self' or 'Touch'
+        }
+    }
+    
+    const duration = spellData.duration.map(d => d.type).join(", ");
+    const castingTime = spellData.time.map(t => `${t.number} ${t.unit}`).join(", ");
+
+    // Build the SpellType object
     return {
-      name: spellData.name || 'Unknown Name',
-      level: spellData.level || 0,
-      schoolOfMagic: (schoolMapping as Record<string, SchoolOfMagic>)[spellData.school as string] || SchoolOfMagic.other,
-      desc: spellData.entries?.join("\n") || '',
-      higherLevelDesc: spellData.entriesHigherLevel?.map((e: { entries: string[] }) => e.entries.join("\n")).join("\n") || '',
-      range: range,
-      duration: spellData.duration?.map((d: { type: string }) => d.type).join(", ") || '',
-      castingTime: spellData.time?.map((t: { number: string; unit: string }) => `${t.number} ${t.unit}`).join(", ") || '',
+      name: spellData.name,
+      level: spellData.level,
+      schoolOfMagic,
+      desc: spellData.entries.join("\n"),
+      higherLevelDesc: spellData.entriesHigherLevel?.map(e => e.entries.join("\n")).join("\n") || '',
+      range,
+      duration,
+      castingTime,
       ritual: spellData.ritual || false,
       concentration: spellData.concentration || false,
-      damageAtCharacterLevel: {}, // Needs to be populated based on your data structure
-      components: components,
+      damageAtCharacterLevel: {}, // Requires specific handling based on your JSON structure
+      components,
       descSize: 9 // Default value
     };
 
