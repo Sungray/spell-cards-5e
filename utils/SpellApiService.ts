@@ -14,7 +14,10 @@ const SpellApiService = {
     if (process.env.USE_5ETOOLS === 'true') {
       const localSpells = SpellApiService.readLocalSpells();
       // Process local spells data
-      return localSpells;
+      return {
+        results: localSpells,
+        count: localSpells.length,
+      };
     } else {
       const apiUrlBase = process.env['5E_API'] || 'https://www.dnd5eapi.co/';
       // Ensure that the base URL ends with a slash
@@ -49,20 +52,17 @@ const SpellApiService = {
 
 
 
-  readLocalSpells: (): SpellType[] => { // Change return type to SpellType[]
+  readLocalSpells: (): SpellType[] => {
     let spells: SpellType[] = [];
     const spellsDir = path.join(__dirname, 'spells');
     const customSpellsDir = path.join(__dirname, 'custom-spells');
-    
+
     // Read spells from both directories
-    spells = spells.concat(this.readSpellsFromDirectory(spellsDir));
-    spells = spells.concat(this.readSpellsFromDirectory(customSpellsDir));
-    
-    // Return in the expected format
-    return {
-      results: spells,
-      count: spells.length
-    };
+    spells = spells.concat(SpellApiService.readSpellsFromDirectory(spellsDir));
+    spells = spells.concat(SpellApiService.readSpellsFromDirectory(customSpellsDir));
+
+    // Convert each spell data and return as an array of SpellType
+    return spells;
   },
   
   convertDamagePerLevel: (apiResponse: Record<string, any>): Record<number, string> => {
