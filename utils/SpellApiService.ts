@@ -30,7 +30,7 @@ const SpellApiService = {
 
   getList: async (): Promise<SrdSpellsReponse> => {
     const config = await getConfig();
-    const apiUrl = config.USE_5ETOOLS === 'true' ? '/api/spells' : `${config.API_URL}api/spells`;
+    const apiUrl = config.USE_5ETOOLS === 'true' ? '/api/spells' : '${config.API_URL}api/spells';
     const response = await fetch(apiUrl);
     const data = await response.json();
     console.log("API Response for getList:", data);  // Log the response data
@@ -40,8 +40,8 @@ const SpellApiService = {
   get: async (spellName: string): Promise<SpellType> => {
     const config = await getConfig();
     const apiUrl = config.USE_5ETOOLS === 'true'
-      ? `/api/spells?spellName=${encodeURIComponent(spellName)}`
-      : `${config.API_URL}api/spells/${spellName}`;
+      ? '/api/spells/${spellName}'
+      : '${config.API_URL}api/spells/${spellName}';
     const response = await fetch(apiUrl);
     const data = await response.json();
     console.log("API Response for get:", data);  // Log the response data
@@ -121,14 +121,14 @@ const SpellApiService = {
     let range = 'Varies';
     if (spellData.range) {
         if (spellData.range.distance) {
-            range = `${spellData.range.distance.amount ?? ''} ${spellData.range.distance.type}`;
+            range = '${spellData.range.distance.amount ?? ''} ${spellData.range.distance.type}';
         } else if (spellData.range.type) {
             range = spellData.range.type; // If the range is a special type like 'Self' or 'Touch'
         }
     }
     
     const duration = spellData.duration.map((d: DurationType) => d.type).join(", ");
-    const castingTime = spellData.time.map((t: TimeType) => `${t.number} ${t.unit}`).join(", ");
+    const castingTime = spellData.time.map((t: TimeType) => '${t.number} ${t.unit}').join(", ");
     const higherLevelDesc = spellData.entriesHigherLevel?.map((e: HigherLevelEntryType) => e.entries.join("\n")).join("\n") || '';
 
     console.log("Converting spell:", spellData.name);
@@ -163,7 +163,7 @@ const SpellApiService = {
   parseRange: (rangeData: any): string => {
     if (typeof rangeData === 'string') return rangeData;
     if (rangeData.type === 'point') {
-      return rangeData.distance.type === 'feet' ? `${rangeData.distance.amount} feet` : 'Self';
+      return rangeData.distance.type === 'feet' ? '${rangeData.distance.amount} feet' : 'Self';
     }
     return 'Unknown';
   }
