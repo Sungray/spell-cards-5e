@@ -14,9 +14,14 @@ const SpellApiService = {
     if (process.env.USE_5ETOOLS === 'true') {
       const localSpells = SpellApiService.readLocalSpells();
       // Process local spells data
+      const mappedSpells = localSpells.map((spell, index) => ({
+        index: index + 1, // You can adjust the index as needed
+        url: '', // Add the appropriate URL if available
+        ...spell,
+      }));
       return {
-        results: localSpells,
-        count: localSpells.length,
+        results: mappedSpells,
+        count: mappedSpells.length,
       };
     } else {
       const apiUrlBase = process.env['5E_API'] || 'https://www.dnd5eapi.co/';
