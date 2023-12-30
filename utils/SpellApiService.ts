@@ -8,64 +8,19 @@ type SrdSpellsReponse = {
 
 const SpellApiService = {
 
-  getList: async (): Promise<SrdSpellsReponse> => {
-    if (process.env.USE_5ETOOLS === 'true') {
-      const localSpells = SpellApiService.readLocalSpells();
-      // Process local spells data
-      const mappedSpells = localSpells.map((spell, index) => ({
-        index: (index + 1).toString(), // Convert index to string
-        url: '', // Add the appropriate URL if available
-        ...spell,
-      }));
-      return {
-        results: mappedSpells,
-        count: mappedSpells.length,
-      };
-    } else {
-      const apiUrlBase = process.env['5E_API'] || 'https://www.dnd5eapi.co/';
-      // Ensure that the base URL ends with a slash
-      const apiUrl = apiUrlBase.endsWith('/') ? apiUrlBase : `${apiUrlBase}/`;
-      const endpoint = 'api/spells';
-      const list = await fetch(`${apiUrl}${endpoint}`);
-      return list.json();
-    }
+  getList: async (): Promise<SrdSpellsResponse> => {
+    const apiUrl = process.env.USE_5ETOOLS === 'true' ? 'http://localhost:3000/api/spells' : `${process.env['5E_API'] || 'https://www.dnd5eapi.co/'}api/spells`;
+    const list = await fetch(apiUrl);
+    return list.json();
   },
 
-  readSpellsFromDirectory: (dirPath: string): SpellType[] => {
-    let spells: SpellType[] = [];
-    try {
-      const files = fs.readdirSync(dirPath);
-
-      files.forEach(file => {
-        if (file.endsWith('.json')) {
-          const filePath = path.join(dirPath, file);
-          const fileContent = fs.readFileSync(filePath, 'utf8');
-          const spellData: any[] = JSON.parse(fileContent); // Explicitly type as any[]
-
-          if (Array.isArray(spellData)) {
-            spells.push(...spellData.map((data: any) => SpellApiService.convert5eToolSpell(data as any))); // assert data as any
-          }
-        }
-      });
-    } catch (err) {
-      console.error(`Error reading spells from directory ${dirPath}:`, err);
-    }
-    return spells;
-  },
-
-
-
-  readLocalSpells: (): SpellType[] => {
-    let spells: SpellType[] = [];
-    const spellsDir = path.join(__dirname, 'spells');
-    const customSpellsDir = path.join(__dirname, 'custom-spells');
-
-    // Read spells from both directories
-    spells = spells.concat(SpellApiService.readSpellsFromDirectory(spellsDir));
-    spells = spells.concat(SpellApiService.readSpellsFromDirectory(customSpellsDir));
-
-    // Convert each spell data and return as an array of SpellType
-    return spells;
+  get: async (spellName: string): Promise<SpellType> => {
+    const apiUrl = process.env.USE_5ETOOLS === 'true' 
+      ? `http://localhost:3000/api/spells?spellName=${encodeURIComponent(spellName)}` 
+      : `https://www.dnd5eapi.co/api/spells/${spellName}`;
+    const data = await fetch(apiUrl);
+    const json = await data.json();
+    return process.env.USE_5ETOOLS === 'true' ? SpellApiService.convert5eToolSpell(json) : SpellApiService.convert(json);
   },
   
   convertDamagePerLevel: (apiResponse: Record<string, any>): Record<number, string> => {
@@ -107,22 +62,6 @@ const SpellApiService = {
       components
     };
     return convertedSpell;
-  },
-  
-  get: async (spellName: string): Promise<SpellType> => {
-    if (process.env.USE_5ETOOLS === 'true') {
-      // Fetch individual spell from the local API endpoint with the spell name
-      const apiUrl = `http://localhost:3000/api/spells?spellName=${encodeURIComponent(spellName)}`;
-      const data = await fetch(apiUrl);
-      const json = await data.json();
-      return SpellApiService.convert(json);
-    } else {
-      // Fetch individual spell from the external API
-      const apiUrlBase = 'https://www.dnd5eapi.co/';
-      const data = await fetch(`${apiUrlBase}api/spells/${spellName}`);
-      const json = await data.json();
-      return SpellApiService.convert(json);
-    }
   },
 
   convert5eToolSpell(spellData: any): SpellType {
