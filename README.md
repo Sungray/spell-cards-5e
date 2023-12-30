@@ -8,3 +8,8 @@ This is a little web app that makes it easy to generate printable PDFs of your d
 
 Many thanks to [DnD5eAPI](https://www.dnd5eapi.co/), [Game Icons](https://game-icons.net/), and the [SRD](https://media.wizards.com/2016/downloads/DND/SRD-OGL_V5.1.pdf).
 
+The point of this fork is to dockerize it and allow the use of a local 5e api. Run like this:
+
+docker run -p 3000:3000 -e 5E_API='http://5e-api-ip/' ghcr.io/cedlap/spell-cards-5e:latest
+
+The 5E_API env variable is optional.
