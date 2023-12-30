@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 const readSpellsFromDirectory = (dirPath) => {
-  let spellMap = {};
+  let spells = [];
   try {
     const files = fs.readdirSync(dirPath);
     files.forEach(file => {
@@ -10,15 +10,15 @@ const readSpellsFromDirectory = (dirPath) => {
         const filePath = path.join(dirPath, file);
         const fileContents = fs.readFileSync(filePath, 'utf8');
         const spellData = JSON.parse(fileContents);
-        spellData.forEach(spell => {
-          spellMap[spell.name.toLowerCase()] = spell;
-        });
+        if (spellData.spell && Array.isArray(spellData.spell)) {
+          spells.push(...spellData.spell);
+        }
       }
     });
   } catch (err) {
     console.error(`Error reading spells from directory ${dirPath}:`, err);
   }
-  return spellMap;
+  return spells;
 };
 
 export default function handler(req, res) {
