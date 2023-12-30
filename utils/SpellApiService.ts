@@ -39,9 +39,9 @@ const SpellApiService = {
 
   get: async (spellName: string): Promise<SpellType> => {
     const config = await getConfig();
-    const apiUrl = config.USE_5ETOOLS === 'true'
-      ? '/api/spells/${spellName}'
-      : '${config.API_URL}api/spells/${spellName}';
+  const apiUrl = config.USE_5ETOOLS === 'true'
+    ? `/api/spells/${spellName.toLowerCase().replace(/\s+/g, '-')}`
+    : `${config.API_URL}api/spells/${spellName}`;
     const response = await fetch(apiUrl);
     const data = await response.json();
     console.log("API Response for get:", data);  // Log the response data
