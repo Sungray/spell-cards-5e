@@ -72,6 +72,10 @@ const SpellApiService = {
   },
 
   convert5eToolSpell(spellData: any): SpellType {
+
+    // Define a type for the keys in schoolMapping
+    type SchoolKey = 'T' | 'N' | 'C' | 'A' | 'E' | 'V' | 'I' | 'D';
+    
     // School of Magic mapping
     const schoolMapping = {
       'T': SchoolOfMagic.transmutation,
@@ -83,7 +87,9 @@ const SpellApiService = {
       'I': SchoolOfMagic.illusion,
       'D': SchoolOfMagic.divination,
     };
-    const schoolOfMagic = schoolMapping[spellData.school] || SchoolOfMagic.other;
+    
+    // Use type assertion when accessing schoolMapping
+    const schoolOfMagic = schoolMapping[spellData.school as SchoolKey] || SchoolOfMagic.other;
   
     // Handling components
     const components = {
