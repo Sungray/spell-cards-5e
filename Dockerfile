@@ -9,9 +9,9 @@ RUN git clone --depth 1 --filter=blob:none --sparse https://github.com/5etools-m
     cd /tmp/5etools; \
     git sparse-checkout init --cone; \
     git sparse-checkout set data/spells; \
-    mkdir -p /usr/src/app/spells; \
-    mv data/spells /usr/src/app/spells; \
+    mv /tmp/5etools/data/spells /usr/src/app/spells; \
     rm -rf /tmp/5etools
+
 
 # Install the app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
