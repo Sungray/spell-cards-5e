@@ -57,14 +57,11 @@ const SpellApiService = {
     // Read spells from both directories
     spells = spells.concat(this.readSpellsFromDirectory(spellsDir));
     spells = spells.concat(this.readSpellsFromDirectory(customSpellsDir));
-
-    // Convert each spell data
-    const convertedSpells = spells.map(spellData => this.convert5eToolSpell(spellData));
     
     // Return in the expected format
     return {
-      results: convertedSpells,
-      count: convertedSpells.length
+      results: spells,
+      count: spells.length
     };
   },
   
