@@ -24,21 +24,19 @@ const SpellApiService = {
     }
   },
 
-  readLocalSpells: (): SrdSpellsReponse => {
+  readLocalSpells: (): SpellType[] => { // Change return type to SpellType[]
     let spells: SpellType[] = [];
     const spellsDir = path.join(__dirname, 'spells');
     const customSpellsDir = path.join(__dirname, 'custom-spells');
     
     // Read spells from both directories
-    spells = spells.concat(SpellApiService.readSpellsFromDirectory(spellsDir));
-    spells = spells.concat(SpellApiService.readSpellsFromDirectory(customSpellsDir));
+    spells = spells.concat(this.readSpellsFromDirectory(spellsDir));
+    spells = spells.concat(this.readSpellsFromDirectory(customSpellsDir));
     
-    // Convert each spell data and return in the expected format
-    return {
-      results: spells.map(spellData => SpellApiService.convert5eToolSpell(spellData)),
-      count: spells.length
-    };
+    // Convert each spell data and return as an array of SpellType
+    return spells.map(spellData => this.convert5eToolSpell(spellData));
   },
+
 
   readSpellsFromDirectory: (dirPath: string): any[] => {
     let spells = [];
