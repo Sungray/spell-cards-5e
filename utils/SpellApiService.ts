@@ -121,7 +121,8 @@ const SpellApiService = {
     let range = 'Varies';
     if (spellData.range) {
         if (spellData.range.distance) {
-            range = '${spellData.range.distance.amount ?? ''} ${spellData.range.distance.type}';
+            range = `${spellData.range.distance.amount ?? ''} ${spellData.range.distance.type}`;
+
         } else if (spellData.range.type) {
             range = spellData.range.type; // If the range is a special type like 'Self' or 'Touch'
         }
