@@ -6,25 +6,28 @@ type SrdSpellsReponse = {
   count: number
 }
 
+const getConfig = async () => {
+  const response = await fetch('/api/config');
+  return response.json();
+};
+
 const SpellApiService = {
 
   getList: async (): Promise<SrdSpellsReponse> => {
-    console.log("USE_5ETOOLS value is:", process.env.USE_5ETOOLS);
-
-    const apiUrl = process.env.USE_5ETOOLS === 'true' ? 'http://localhost:3000/api/spells' : `${process.env['5E_API'] || 'https://www.dnd5eapi.co/'}api/spells`;
+    const config = await getConfig();
+    const apiUrl = config.USE_5ETOOLS === 'true' ? 'http://localhost:3000/api/spells' : `${config.API_URL}api/spells`;
     const list = await fetch(apiUrl);
     return list.json();
   },
 
   get: async (spellName: string): Promise<SpellType> => {
-    
-    console.log("USE_5ETOOLS value is:", process.env.USE_5ETOOLS);
-    const apiUrl = process.env.USE_5ETOOLS === 'true' 
-      ? `http://localhost:3000/api/spells?spellName=${encodeURIComponent(spellName)}` 
-      : `https://www.dnd5eapi.co/api/spells/${spellName}`;
+    const config = await getConfig();
+    const apiUrl = config.USE_5ETOOLS === 'true'
+      ? `http://localhost:3000/api/spells?spellName=${encodeURIComponent(spellName)}`
+      : `${config.API_URL}api/spells/${spellName}`;
     const data = await fetch(apiUrl);
     const json = await data.json();
-    return process.env.USE_5ETOOLS === 'true' ? SpellApiService.convert5eToolSpell(json) : SpellApiService.convert(json);
+    return config.USE_5ETOOLS === 'true' ? SpellApiService.convert5eToolSpell(json) : SpellApiService.convert(json);
   },
   
   convertDamagePerLevel: (apiResponse: Record<string, any>): Record<number, string> => {
