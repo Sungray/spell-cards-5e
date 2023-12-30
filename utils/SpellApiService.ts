@@ -8,7 +8,7 @@ type SrdSpellsReponse = {
 
 const SpellApiService = {
 
-  getList: async (): Promise<SrdSpellsResponse> => {
+  getList: async (): Promise<SrdSpellsReponse> => {
     const apiUrl = process.env.USE_5ETOOLS === 'true' ? 'http://localhost:3000/api/spells' : `${process.env['5E_API'] || 'https://www.dnd5eapi.co/'}api/spells`;
     const list = await fetch(apiUrl);
     return list.json();
