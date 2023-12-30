@@ -9,8 +9,10 @@ type SrdSpellsReponse = {
 const SpellApiService = {
 
   getList: async (): Promise<SrdSpellsReponse> => {
-    const apiUrl = process.env['5E_API'] || 'https://www.dnd5eapi.co/';
-    const endpoint = '/api/spells';
+    const apiUrlBase = process.env['5E_API'] || 'https://www.dnd5eapi.co/';
+    // Ensure that the base URL ends with a slash
+    const apiUrl = apiUrlBase.endsWith('/') ? apiUrlBase : `${apiUrlBase}/`;
+    const endpoint = 'api/spells';
     const list = await fetch(`${apiUrl}${endpoint}`);
     return list.json();
   },
