@@ -25,20 +25,19 @@ const SpellApiService = {
     }
   },
 
-  readSpellsFromDirectory = (dirPath: string): SpellType[] => {
+  readSpellsFromDirectory: (dirPath: string): SpellType[] => {
     let spells: SpellType[] = [];
     try {
       const files = fs.readdirSync(dirPath);
-  
+
       files.forEach(file => {
         if (file.endsWith('.json')) {
           const filePath = path.join(dirPath, file);
           const fileContent = fs.readFileSync(filePath, 'utf8');
-          const spellData = JSON.parse(fileContent);
-  
+          const spellData: any[] = JSON.parse(fileContent); // Explicitly type as any[]
+
           if (Array.isArray(spellData)) {
-            // Filter out undefined elements and then map
-            spells.push(...spellData.filter(data => data !== undefined).map((data: any) => this.convert5eToolSpell(data)));
+            spells.push(...spellData.map((data: any) => SpellApiService.convert5eToolSpell(data as any))); // assert data as any
           }
         }
       });
@@ -46,25 +45,25 @@ const SpellApiService = {
       console.error(`Error reading spells from directory ${dirPath}:`, err);
     }
     return spells;
-  };
+  },
 
 
 
-  readLocalSpells = (): SrdSpellsReponse => {
+  readLocalSpells: (): SrdSpellsResponse => {
     let spells: SpellType[] = [];
     const spellsDir = path.join(__dirname, 'spells');
     const customSpellsDir = path.join(__dirname, 'custom-spells');
-    
+
     // Read spells from both directories
-    spells = spells.concat(this.readSpellsFromDirectory(spellsDir));
-    spells = spells.concat(this.readSpellsFromDirectory(customSpellsDir));
-    
+    spells = spells.concat(SpellApiService.readSpellsFromDirectory(spellsDir));
+    spells = spells.concat(SpellApiService.readSpellsFromDirectory(customSpellsDir));
+
     // Convert each spell data and return as an array of SpellType
     return {
       results: spells,
-      count: spells.length
+      count: spells.length,
     };
-  };
+  },
   
   convertDamagePerLevel: (apiResponse: Record<string, any>): Record<number, string> => {
     if(!apiResponse["damage"] || !apiResponse["damage"]["damage_at_character_level"]) {
