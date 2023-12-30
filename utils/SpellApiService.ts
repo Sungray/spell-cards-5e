@@ -29,15 +29,16 @@ const SpellApiService = {
     let spells: SpellType[] = [];
     try {
       const files = fs.readdirSync(dirPath);
-
+  
       files.forEach(file => {
         if (file.endsWith('.json')) {
           const filePath = path.join(dirPath, file);
           const fileContent = fs.readFileSync(filePath, 'utf8');
           const spellData = JSON.parse(fileContent);
-
+  
           if (Array.isArray(spellData)) {
-            spells.push(...spellData.map(this.convert5eToolSpell.bind(this)));
+            // Using an inline arrow function to ensure the correct type is passed
+            spells.push(...spellData.map((data: any) => this.convert5eToolSpell(data as any))); // assert data as any
           }
         }
       });
