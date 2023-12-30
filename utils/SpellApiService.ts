@@ -6,6 +6,16 @@ type SrdSpellsReponse = {
   count: number
 }
 
+interface DurationType {
+  type: string;
+  // Add other properties of duration objects if there are any
+}
+
+interface TimeType {
+  number: number;
+  unit: string;
+}
+
 const getConfig = async () => {
   const response = await fetch('/api/config');
   return response.json();
@@ -109,8 +119,8 @@ const SpellApiService = {
         }
     }
     
-    const duration = spellData.duration.map(d => d.type).join(", ");
-    const castingTime = spellData.time.map(t => `${t.number} ${t.unit}`).join(", ");
+    const duration = spellData.duration.map((d: DurationType) => d.type).join(", ");
+    const castingTime = spellData.time.map((t: TimeType) => `${t.number} ${t.unit}`).join(", ");
 
     // Build the SpellType object
     return {
