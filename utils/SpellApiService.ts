@@ -126,6 +126,7 @@ const SpellApiService = {
     
     const duration = spellData.duration.map((d: DurationType) => d.type).join(", ");
     const castingTime = spellData.time.map((t: TimeType) => `${t.number} ${t.unit}`).join(", ");
+    const higherLevelDesc = spellData.entriesHigherLevel?.map((e: HigherLevelEntryType) => e.entries.join("\n")).join("\n") || '';
 
     // Build the SpellType object
     return {
@@ -133,7 +134,7 @@ const SpellApiService = {
       level: spellData.level,
       schoolOfMagic,
       desc: spellData.entries.join("\n"),
-      const higherLevelDesc = spellData.entriesHigherLevel?.map((e: HigherLevelEntryType) => e.entries.join("\n")).join("\n") || '';
+      higherLevelDesc,
       range,
       duration,
       castingTime,
