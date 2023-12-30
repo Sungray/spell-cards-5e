@@ -12,4 +12,4 @@ The point of this fork is to dockerize it and allow the use of a local 5e api. R
 
 docker run -p 3000:3000 -e 5E_API='http://5e-api-ip/' ghcr.io/cedlap/spell-cards-5e:latest
 
-The 5E_API env variable is optional.
+The 5E_API env variable is optional and will default to 'https://www.dnd5eapi.co/'.
