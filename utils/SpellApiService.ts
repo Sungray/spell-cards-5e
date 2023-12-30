@@ -44,8 +44,8 @@ const SpellApiService = {
   },
 
 
-  readSpellsFromDirectory: (dirPath: string): any[] => {
-    let spells = [];
+  readSpellsFromDirectory: (dirPath: string): SpellType[] => {
+    let spells: SpellType[] = [];
     try {
       const files = fs.readdirSync(dirPath);
   
@@ -54,7 +54,8 @@ const SpellApiService = {
           const filePath = path.join(dirPath, file);
           const fileContent = fs.readFileSync(filePath, 'utf8');
           const spellData = JSON.parse(fileContent);
-          spells.push(...spellData);
+          // Assuming each file contains an array of spells
+          spells.push(...spellData.map(data => this.convert5eToolSpell(data)));
         }
       });
     } catch (err) {
