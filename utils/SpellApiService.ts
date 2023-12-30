@@ -29,15 +29,15 @@ const SpellApiService = {
     let spells: SpellType[] = [];
     try {
       const files = fs.readdirSync(dirPath);
-  
+
       files.forEach(file => {
         if (file.endsWith('.json')) {
           const filePath = path.join(dirPath, file);
           const fileContent = fs.readFileSync(filePath, 'utf8');
           const spellData = JSON.parse(fileContent);
-  
+
           if (Array.isArray(spellData)) {
-            spells.push(...spellData.map((data: any) => this.convert5eToolSpell(data)));
+            spells.push(...spellData.map(this.convert5eToolSpell.bind(this)));
           }
         }
       });
@@ -126,28 +126,28 @@ const SpellApiService = {
   
     // Components mapping
     const components = {
-      verbal: spellData.components?.v || false,
-      somatic: spellData.components?.s || false,
-      material: spellData.components?.m || false,
-      materialDesc: spellData.components?.m || '' // Adjust if more detail is needed
+      verbal: spellData.components?.v ?? false,
+      somatic: spellData.components?.s ?? false,
+      material: !!spellData.components?.m,
+      materialDesc: spellData.components?.m ?? ''
     };
-
-     // Convert range
-    const range = spellData.range.type === 'point' && spellData.range.distance ?
-      `${spellData.range.distance.amount || ''} ${spellData.range.distance.type}` : 
+  
+    // Convert range
+    const range = spellData.range?.type === 'point' && spellData.range.distance ?
+      `${spellData.range.distance.amount ?? ''} ${spellData.range.distance.type}` : 
       'Varies';
   
     return {
-      name: spellData.name,
-      level: spellData.level,
-      schoolOfMagic: schoolMapping[spellData.school] || SchoolOfMagic.Unknown,
-      desc: spellData.entries.join("\n"),
-      higherLevelDesc: spellData.entriesHigherLevel?.map(e => e.entries.join("\n")).join("\n") || '',
+      name: spellData.name ?? 'Unknown Name',
+      level: spellData.level ?? 0,
+      schoolOfMagic: schoolMapping[spellData.school] ?? SchoolOfMagic.Unknown,
+      desc: spellData.entries?.join("\n") ?? '',
+      higherLevelDesc: spellData.entriesHigherLevel?.map(e => e.entries.join("\n")).join("\n") ?? '',
       range: range,
-      duration: spellData.duration.map(d => d.type).join(", "),
-      castingTime: spellData.time.map(t => `${t.number} ${t.unit}`).join(", "),
-      ritual: spellData.ritual || false,
-      concentration: spellData.concentration || false,
+      duration: spellData.duration?.map(d => d.type).join(", ") ?? '',
+      castingTime: spellData.time?.map(t => `${t.number} ${t.unit}`).join(", ") ?? '',
+      ritual: spellData.ritual ?? false,
+      concentration: spellData.concentration ?? false,
       damageAtCharacterLevel: {}, // Needs to be populated based on your data structure
       components: components,
       descSize: 9 // Default value
