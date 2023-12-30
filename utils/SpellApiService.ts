@@ -24,7 +24,27 @@ const SpellApiService = {
     }
   },
 
-  readLocalSpells: (): SrdSpellsReponse => {
+  readSpellsFromDirectory = (dirPath: string): SpellType[] => {
+    let spells: SpellType[] = [];
+    try {
+      const files = fs.readdirSync(dirPath);
+
+      files.forEach(file => {
+        if (file.endsWith('.json')) {
+          const filePath = path.join(dirPath, file);
+          const fileContent = fs.readFileSync(filePath, 'utf8');
+          const spellData = JSON.parse(fileContent);
+          // Convert and add each spell to the spells array
+          spells.push(...spellData.map(data => this.convert5eToolSpell(data)));
+        }
+      });
+    } catch (err) {
+      console.error(`Error reading spells from directory ${dirPath}:`, err);
+    }
+    return spells;
+  };
+
+  readLocalSpells = (): SrdSpellsReponse => {
     let spells: SpellType[] = [];
     const spellsDir = path.join(__dirname, 'spells');
     const customSpellsDir = path.join(__dirname, 'custom-spells');
@@ -33,36 +53,12 @@ const SpellApiService = {
     spells = spells.concat(this.readSpellsFromDirectory(spellsDir));
     spells = spells.concat(this.readSpellsFromDirectory(customSpellsDir));
     
-    // Convert each spell data
-    const convertedSpells = spells.map(spellData => this.convert5eToolSpell(spellData));
-  
-    // Return in the expected format
+    // Convert each spell data and return as an array of SpellType
     return {
-      results: convertedSpells,
-      count: convertedSpells.length
+      results: spells,
+      count: spells.length
     };
-  },
-
-
-  readSpellsFromDirectory: (dirPath: string): SpellType[] => {
-    let spells: SpellType[] = [];
-    try {
-      const files = fs.readdirSync(dirPath);
-  
-      files.forEach(file => {
-        if (file.endsWith('.json')) {
-          const filePath = path.join(dirPath, file);
-          const fileContent = fs.readFileSync(filePath, 'utf8');
-          const spellData = JSON.parse(fileContent);
-          // Assuming each file contains an array of spells
-          spells.push(...spellData.map(data => this.convert5eToolSpell(data)));
-        }
-      });
-    } catch (err) {
-      console.error(`Error reading spells from directory ${dirPath}:`, err);
-    }
-    return spells;
-  },
+  };
   
   convertDamagePerLevel: (apiResponse: Record<string, any>): Record<number, string> => {
     if(!apiResponse["damage"] || !apiResponse["damage"]["damage_at_character_level"]) {
