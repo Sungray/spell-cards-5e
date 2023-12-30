@@ -30,10 +30,10 @@ const SpellApiService = {
 
   getList: async (): Promise<SrdSpellsReponse> => {
     const config = await getConfig();
-    const apiUrl = config.USE_5ETOOLS === 'true' ? '/api/spells' : '${config.API_URL}api/spells';
+    const apiUrl = config.USE_5ETOOLS === 'true' ? '/api/spells' : `${config.API_URL}api/spells`;
     const response = await fetch(apiUrl);
     const data = await response.json();
-    console.log("API Response for getList:", data);  // Log the response data
+    console.log("API Response for getList:", data); // Log the response data
     return data;
   },
 
