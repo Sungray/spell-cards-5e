@@ -105,14 +105,14 @@ const SpellApiService = {
   convert5eToolSpell: (spellData: any): SpellType => {
     // School of Magic mapping
     const schoolMapping = {
-      'T': 'transmutation',
-      'N': 'necromancy',
-      'C': 'conjuration',
-      'A': 'abjuration',
-      'E': 'enchantment',
-      'V': 'evocation',
-      'I': 'illusion',
-      'D': 'divination',
+      'T': SchoolOfMagic.Transmutation,
+      'N': SchoolOfMagic.Necromancy,
+      'C': SchoolOfMagic.Conjuration,
+      'A': SchoolOfMagic.Abjuration,
+      'E': SchoolOfMagic.Enchantment,
+      'V': SchoolOfMagic.Evocation,
+      'I': SchoolOfMagic.Illusion,
+      'D': SchoolOfMagic.Divination,
     };
   
     // Components mapping
@@ -122,26 +122,26 @@ const SpellApiService = {
       material: spellData.components?.m || false,
       materialDesc: spellData.components?.m || '' // Adjust if more detail is needed
     };
-  
-    // Damage at character level (needs adaptation based on the 5etools structure)
-    let damageAtCharacterLevel = {}; 
-    // Populate damageAtCharacterLevel based on 5etools structure
+
+     // Convert range
+    const range = spellData.range.type === 'point' && spellData.range.distance ?
+      `${spellData.range.distance.amount || ''} ${spellData.range.distance.type}` : 
+      'Varies';
   
     return {
       name: spellData.name,
       level: spellData.level,
-      desc: spellData.entries?.join("\n") || '',
+      schoolOfMagic: schoolMapping[spellData.school] || SchoolOfMagic.Unknown,
+      desc: spellData.entries.join("\n"),
       higherLevelDesc: spellData.entriesHigherLevel?.map(e => e.entries.join("\n")).join("\n") || '',
-      schoolOfMagic: schoolMapping[spellData.school] || 'unknown',
-      range: this.parseRange(spellData.range),
-      duration: spellData.duration?.map(d => d.type).join(", ") || '',
+      range: range,
+      duration: spellData.duration.map(d => d.type).join(", "),
+      castingTime: spellData.time.map(t => `${t.number} ${t.unit}`).join(", "),
       ritual: spellData.ritual || false,
       concentration: spellData.concentration || false,
-      castingTime: spellData.time?.map(t => `${t.number} ${t.unit}`).join(", ") || '',
-      descSize: 9, // Default value
-      damageAtCharacterLevel,
-      components,
-      // Additional fields can be mapped here
+      damageAtCharacterLevel: {}, // Needs to be populated based on your data structure
+      components: components,
+      descSize: 9 // Default value
     };
   },
   
