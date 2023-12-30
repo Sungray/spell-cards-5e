@@ -34,8 +34,11 @@ const SpellApiService = {
         if (file.endsWith('.json')) {
           const filePath = path.join(dirPath, file);
           const fileContent = fs.readFileSync(filePath, 'utf8');
-          const spellData: any[] = JSON.parse(fileContent); // Explicitly type as any[]
-          spells.push(...spellData.map((data: any) => this.convert5eToolSpell(data)));
+          const spellData = JSON.parse(fileContent);
+  
+          if (Array.isArray(spellData)) {
+            spells.push(...spellData.map((data: any) => this.convert5eToolSpell(data)));
+          }
         }
       });
     } catch (err) {
@@ -43,6 +46,7 @@ const SpellApiService = {
     }
     return spells;
   };
+
 
   readLocalSpells = (): SrdSpellsReponse => {
     let spells: SpellType[] = [];
