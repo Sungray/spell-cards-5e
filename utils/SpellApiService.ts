@@ -100,10 +100,9 @@ const SpellApiService = {
     };
   
     // Convert range, duration, casting time
-    const range = spellData.range.distance ? `${spellData.range.distance.amount} ${spellData.range.distance.type}` : 'Varies';
     let range = 'Varies';
     if (spellData.range) {
-        if (spellData.range.type === 'point' && spellData.range.distance) {
+        if (spellData.range.distance) {
             range = `${spellData.range.distance.amount ?? ''} ${spellData.range.distance.type}`;
         } else if (spellData.range.type) {
             range = spellData.range.type; // If the range is a special type like 'Self' or 'Touch'
