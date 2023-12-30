@@ -15,7 +15,7 @@ const SpellApiService = {
 
   getList: async (): Promise<SrdSpellsReponse> => {
     const config = await getConfig();
-    const apiUrl = config.USE_5ETOOLS === 'true' ? 'http://localhost:3000/api/spells' : `${config.API_URL}api/spells`;
+    const apiUrl = config.USE_5ETOOLS === 'true' ? '/api/spells' : `${config.API_URL}api/spells`;
     const list = await fetch(apiUrl);
     return list.json();
   },
@@ -23,7 +23,7 @@ const SpellApiService = {
   get: async (spellName: string): Promise<SpellType> => {
     const config = await getConfig();
     const apiUrl = config.USE_5ETOOLS === 'true'
-      ? `http://localhost:3000/api/spells?spellName=${encodeURIComponent(spellName)}`
+      ? `/api/spells?spellName=${encodeURIComponent(spellName)}`
       : `${config.API_URL}api/spells/${spellName}`;
     const data = await fetch(apiUrl);
     const json = await data.json();
