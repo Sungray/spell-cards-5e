@@ -1,5 +1,3 @@
-import fs from 'fs';
-import path from 'path';
 import { SchoolOfMagic } from "./constants";
 import { SpellType, SrdType  } from "./models";
 
@@ -112,9 +110,19 @@ const SpellApiService = {
   },
   
   get: async (spellName: string): Promise<SpellType> => {
-    const data = await fetch('https://www.dnd5eapi.co/api/spells/' + spellName);
-    const json = await data.json();
-    return SpellApiService.convert(json);
+    if (process.env.USE_5ETOOLS === 'true') {
+      // Fetch individual spell from the local API endpoint with the spell name
+      const apiUrl = `http://localhost:3000/api/spells?spellName=${encodeURIComponent(spellName)}`;
+      const data = await fetch(apiUrl);
+      const json = await data.json();
+      return SpellApiService.convert(json);
+    } else {
+      // Fetch individual spell from the external API
+      const apiUrlBase = 'https://www.dnd5eapi.co/';
+      const data = await fetch(`${apiUrlBase}api/spells/${spellName}`);
+      const json = await data.json();
+      return SpellApiService.convert(json);
+    }
   },
 
   convert5eToolSpell(spellData: any): SpellType {
