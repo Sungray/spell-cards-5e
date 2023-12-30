@@ -144,20 +144,21 @@ const SpellApiService = {
       'Varies';
   
     return {
-      name: spellData.name ?? 'Unknown Name',
-      level: spellData.level ?? 0,
-      schoolOfMagic: (schoolMapping as Record<string, SchoolOfMagic>)[spellData.school] ?? SchoolOfMagic.other,
-      desc: spellData.entries?.join("\n") ?? '',
-      higherLevelDesc: spellData.entriesHigherLevel?.map(e => e.entries.join("\n")).join("\n") ?? '',
+      name: spellData.name || 'Unknown Name',
+      level: spellData.level || 0,
+      schoolOfMagic: (schoolMapping as Record<string, SchoolOfMagic>)[spellData.school as string] || SchoolOfMagic.other,
+      desc: spellData.entries?.join("\n") || '',
+      higherLevelDesc: spellData.entriesHigherLevel?.map((e: { entries: string[] }) => e.entries.join("\n")).join("\n") || '',
       range: range,
-      duration: spellData.duration?.map(d => d.type).join(", ") ?? '',
-      castingTime: spellData.time?.map(t => `${t.number} ${t.unit}`).join(", ") ?? '',
-      ritual: spellData.ritual ?? false,
-      concentration: spellData.concentration ?? false,
+      duration: spellData.duration?.map((d: { type: string }) => d.type).join(", ") || '',
+      castingTime: spellData.time?.map((t: { number: string; unit: string }) => `${t.number} ${t.unit}`).join(", ") || '',
+      ritual: spellData.ritual || false,
+      concentration: spellData.concentration || false,
       damageAtCharacterLevel: {}, // Needs to be populated based on your data structure
       components: components,
       descSize: 9 // Default value
     };
+
   },
   
   parseRange: (rangeData: any): string => {
