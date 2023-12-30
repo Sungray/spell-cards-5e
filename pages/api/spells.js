@@ -31,17 +31,17 @@ const readSpellsFromDirectory = (dirPath) => {
 export default function handler(req, res) {
   const spellsDir = path.join('/usr/src/app', 'spells');
   const customSpellsDir = path.join('/usr/src/app', 'custom-spells');
-  const spellsMap = { ...readSpellsFromDirectory(spellsDir), ...readSpellsFromDirectory(customSpellsDir) };
+  const spells = [...readSpellsFromDirectory(spellsDir), ...readSpellsFromDirectory(customSpellsDir)];
 
-  const { spellName } = req.query;
-  if (spellName) {
-    const spell = spellsMap[spellName.toLowerCase()];
+  const spellIndex = req.query.index;
+  if (spellIndex) {
+    const spell = spells.find(s => s.index === spellIndex);
     if (spell) {
       res.status(200).json(spell);
     } else {
       res.status(404).json({ error: 'Spell not found' });
     }
   } else {
-    res.status(200).json(Object.values(spellsMap));
+    res.status(200).json(spells);
   }
 }
