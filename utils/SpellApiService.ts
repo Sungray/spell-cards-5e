@@ -49,7 +49,7 @@ const SpellApiService = {
 
 
 
-  readLocalSpells: (): SrdSpellsResponse => {
+  readLocalSpells: (): SrdSpellsReponse => {
     let spells: SpellType[] = [];
     const spellsDir = path.join(__dirname, 'spells');
     const customSpellsDir = path.join(__dirname, 'custom-spells');
