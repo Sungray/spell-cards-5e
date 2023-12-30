@@ -33,7 +33,7 @@ const SpellApiService = {
     spells = spells.concat(SpellApiService.readSpellsFromDirectory(customSpellsDir));
     
     // Process the spells data
-    return SpellApiService.processSpellsData(spells);
+    return SpellApiService.convert5eToolSpell(spells);
   },
 
   readSpellsFromDirectory: (dirPath: string): any[] => {
@@ -102,7 +102,7 @@ const SpellApiService = {
     return SpellApiService.convert(json);
   },
 
-  processSpellsData: (spellsData: any[]): SrdSpellsReponse => {
+  convert5eToolSpell: (spellData: any): SpellType => {
     // School of Magic mapping
     const schoolMapping = {
       'T': 'transmutation',
@@ -114,38 +114,35 @@ const SpellApiService = {
       'I': 'illusion',
       'D': 'divination',
     };
-      
-    return spellsData.map(spell => {
-      // Map components
-      const components = {
-        verbal: spell.components?.v || false,
-        somatic: spell.components?.s || false,
-        material: spell.components?.m || false,
-      };
   
-      // Process damage information if available
-      let damageAtCharacterLevel = {};
-      if (spell.scalingLevelDice) {
-        damageAtCharacterLevel = spell.scalingLevelDice.scaling;
-      }
+    // Components mapping
+    const components = {
+      verbal: spellData.components?.v || false,
+      somatic: spellData.components?.s || false,
+      material: spellData.components?.m || false,
+      materialDesc: spellData.components?.m || '' // Adjust if more detail is needed
+    };
   
-      return {
-        name: spell.name,
-        level: spell.level,
-        desc: spell.entries.join("\n"),
-        higherLevelDesc: spell.entriesHigherLevel?.map(e => e.entries.join("\n")).join("\n") || '',
-        schoolOfMagic: schoolMapping[spell.school] || 'unknown', // Map school abbreviation
-        range: this.parseRange(spell.range),
-        duration: spell.duration.map(d => d.type).join(", "),
-        ritual: spell.ritual || false,
-        concentration: spell.concentration || false,
-        castingTime: spell.time.map(t => `${t.number} ${t.unit}`).join(", "),
-        descSize: 9, // Default value
-        damageAtCharacterLevel,
-        components,
-        // Additional fields can be added here as needed
-      };
-    });
+    // Damage at character level (needs adaptation based on the 5etools structure)
+    let damageAtCharacterLevel = {}; 
+    // Populate damageAtCharacterLevel based on 5etools structure
+  
+    return {
+      name: spellData.name,
+      level: spellData.level,
+      desc: spellData.entries?.join("\n") || '',
+      higherLevelDesc: spellData.entriesHigherLevel?.map(e => e.entries.join("\n")).join("\n") || '',
+      schoolOfMagic: schoolMapping[spellData.school] || 'unknown',
+      range: this.parseRange(spellData.range),
+      duration: spellData.duration?.map(d => d.type).join(", ") || '',
+      ritual: spellData.ritual || false,
+      concentration: spellData.concentration || false,
+      castingTime: spellData.time?.map(t => `${t.number} ${t.unit}`).join(", ") || '',
+      descSize: 9, // Default value
+      damageAtCharacterLevel,
+      components,
+      // Additional fields can be mapped here
+    };
   },
   
   parseRange: (rangeData: any): string => {
