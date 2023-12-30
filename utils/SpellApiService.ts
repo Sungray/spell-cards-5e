@@ -15,7 +15,7 @@ const SpellApiService = {
       const localSpells = SpellApiService.readLocalSpells();
       // Process local spells data
       const mappedSpells = localSpells.map((spell, index) => ({
-        index: index + 1, // You can adjust the index as needed
+        index: (index + 1).toString(), // Convert index to string
         url: '', // Add the appropriate URL if available
         ...spell,
       }));
