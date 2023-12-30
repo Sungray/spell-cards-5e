@@ -23,7 +23,7 @@ const SpellApiService = {
     }
   },
 
-  readLocalSpells: (): SrdSpellsResponse => {
+  readLocalSpells: (): SrdSpellsReponse => {
     let spells = [];
     const spellsDir = path.join(__dirname, 'spells');
     const customSpellsDir = path.join(__dirname, 'custom-spells');
@@ -102,7 +102,7 @@ const SpellApiService = {
     return SpellApiService.convert(json);
   },
 
-  processSpellsData: (spellsData: any[]): SrdSpellsResponse => {
+  processSpellsData: (spellsData: any[]): SrdSpellsReponse => {
     // School of Magic mapping
     const schoolMapping = {
       'T': 'transmutation',
