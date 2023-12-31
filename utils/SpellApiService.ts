@@ -147,13 +147,24 @@ const SpellApiService = {
 
     const higherLevelDesc = spellData.entriesHigherLevel?.map((e: HigherLevelEntryType) => e.entries.join("\n")).join("\n") || '';
 
+    const replaceSpecialTags = (text: string): string => {
+      // Replace {@condition XYZ} with 'XYZ'
+      return text.replace(/\{@condition (.*?)\}/g, '$1');
+    };
+  
     const entries = spellData.entries.map((entry: any) => {
       if (typeof entry === 'object' && entry.type === 'list') {
-        // Add a bullet point before each list item, specifying 'item' as a string
+        return entry.items.map((item: string) => `• ${replaceSpecialTags(item)}`).join("\n");
+      }
+      return replaceSpecialTags(entry);
+    }).join("\n");
+    
+    /*const entries = spellData.entries.map((entry: any) => {
+      if (typeof entry === 'object' && entry.type === 'list') {
         return entry.items.map((item: string) => `• ${item}`).join("\n");
       }
       return entry;
-    }).join("\n");
+    }).join("\n");*/
 
     console.log("Converting spell:", spellData.name);
     console.log("School of Magic:", schoolOfMagicLowerCase);
