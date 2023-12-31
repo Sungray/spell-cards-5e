@@ -12,6 +12,7 @@ interface DurationType {
     amount: number;
     type: string;
   };
+  concentration?: boolean; // Add this line
 }
 
 interface TimeType {
