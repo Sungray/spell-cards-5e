@@ -100,19 +100,19 @@ const SpellApiService = {
     type SchoolKey = 'T' | 'N' | 'C' | 'A' | 'E' | 'V' | 'I' | 'D';
     
     // School of Magic mapping
-    const schoolMapping: { [key in SchoolKey]: { index: string, name: string, url: string } } = {
-      'T': { index: 'transmutation', name: 'Transmutation', url: '/api/magic-schools/transmutation' },
-      'N': { index: 'necromancy', name: 'Necromancy', url: '/api/magic-schools/necromancy' },
-      'C': { index: 'conjuration', name: 'Conjuration', url: '/api/magic-schools/conjuration' },
-      'A': { index: 'abjuration', name: 'Abjuration', url: '/api/magic-schools/abjuration' },
-      'E': { index: 'enchantment', name: 'Enchantment', url: '/api/magic-schools/enchantment' },
-      'V': { index: 'evocation', name: 'Evocation', url: '/api/magic-schools/evocation' },
-      'I': { index: 'illusion', name: 'Illusion', url: '/api/magic-schools/illusion' },
-      'D': { index: 'divination', name: 'Divination', url: '/api/magic-schools/divination' },
+    const schoolMapping = {
+      'T': SchoolOfMagic.transmutation,
+      'N': SchoolOfMagic.necromancy,
+      'C': SchoolOfMagic.conjuration,
+      'A': SchoolOfMagic.abjuration,
+      'E': SchoolOfMagic.enchantment,
+      'V': SchoolOfMagic.evocation,
+      'I': SchoolOfMagic.illusion,
+      'D': SchoolOfMagic.divination,
     };
     
     // Use type assertion when accessing schoolMapping
-    const schoolOfMagic = schoolMapping[spellData.school as SchoolKey] || { index: 'other', name: 'Other', url: '' };
+    const schoolOfMagic = schoolMapping[spellData.school as SchoolKey] || SchoolOfMagic.other;
   
   
     // Handling components
