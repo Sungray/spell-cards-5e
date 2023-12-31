@@ -147,6 +147,13 @@ const SpellApiService = {
 
     const higherLevelDesc = spellData.entriesHigherLevel?.map((e: HigherLevelEntryType) => e.entries.join("\n")).join("\n") || '';
 
+    const entries = spellData.entries.map((entry: any) => {
+      if (typeof entry === 'object' && entry.type === 'list') {
+        return entry.items.join("\n");
+      }
+      return entry;
+    }).join("\n");
+
     console.log("Converting spell:", spellData.name);
     console.log("School of Magic:", schoolOfMagicLowerCase);
     console.log("Components:", components);
@@ -160,7 +167,7 @@ const SpellApiService = {
       name: spellData.name,
       level: spellData.level,
       schoolOfMagic: schoolOfMagicLowerCase as SchoolOfMagic,
-      desc: spellData.entries.join("\n"),
+      desc: entries,
       higherLevelDesc,
       range,
       duration: durationString,
