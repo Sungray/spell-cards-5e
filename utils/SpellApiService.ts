@@ -137,19 +137,12 @@ const SpellApiService = {
     }
     
     const { durationString, isConcentration } = parseDuration(spellData.duration);
-    const castingTime = spellData.time.map((t: TimeType) => {
-      let timeString = `${t.number || ''} ${t.unit || ''}`;
-      if (t.condition) {
-        timeString += `, ${t.condition}`;
-      }
-      return timeString.trim();
-    }).join(", ");
 
     const higherLevelDesc = spellData.entriesHigherLevel?.map((e: HigherLevelEntryType) => e.entries.join("\n")).join("\n") || '';
 
     const replaceSpecialTags = (text: string): string => {
-      // Replace {@condition XYZ} with 'XYZ'
-      return text.replace(/\{@condition (.*?)\}/g, '$1');
+      // Replace {@tag content} with 'content'
+      return text.replace(/\{@.*? (.*?)\}/g, '$1');
     };
   
     const entries = spellData.entries.map((entry: any) => {
@@ -158,6 +151,14 @@ const SpellApiService = {
       }
       return replaceSpecialTags(entry);
     }).join("\n");
+    
+    const castingTime = spellData.time.map((t: TimeType) => {
+      let timeString = `${t.number || ''} ${t.unit || ''}`;
+      if (t.condition) {
+        timeString += `, ${replaceSpecialTags(t.condition)}`;
+      }
+      return timeString.trim();
+    }).join(", ");
     
     /*const entries = spellData.entries.map((entry: any) => {
       if (typeof entry === 'object' && entry.type === 'list') {
