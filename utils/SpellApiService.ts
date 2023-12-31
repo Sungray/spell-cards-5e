@@ -137,7 +137,14 @@ const SpellApiService = {
     }
     
     const { durationString, isConcentration } = parseDuration(spellData.duration);
-    const castingTime = spellData.time.map((t: TimeType) => `${t.number} ${t.unit} ${t.condition}`).join(", ");
+    const castingTime = spellData.time.map((t: TimeType) => {
+      let timeString = `${t.number || ''} ${t.unit || ''}`;
+      if (t.condition) {
+        timeString += `, ${t.condition}`;
+      }
+      return timeString.trim();
+    }).join(", ");
+
     const higherLevelDesc = spellData.entriesHigherLevel?.map((e: HigherLevelEntryType) => e.entries.join("\n")).join("\n") || '';
 
     console.log("Converting spell:", spellData.name);
