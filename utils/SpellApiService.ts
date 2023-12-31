@@ -112,7 +112,7 @@ const SpellApiService = {
     };
     
     // Use type assertion when accessing schoolMapping
-    const schoolOfMagic = schoolMapping[spellData.school] || SchoolOfMagic.other;
+    const schoolOfMagic = (schoolMapping[spellData.school] || SchoolOfMagic.other).toLowerCase();
   
     // Handling components
     const components = {
