@@ -139,7 +139,7 @@ const SpellApiService = {
     const higherLevelDesc = spellData.entriesHigherLevel?.map((e: HigherLevelEntryType) => e.entries.join("\n")).join("\n") || '';
 
     console.log("Converting spell:", spellData.name);
-    console.log("School of Magic:", schoolOfMagic);
+    console.log("School of Magic:", schoolOfMagicLowerCase);
     console.log("Components:", components);
     console.log("Range:", range);
     console.log("Duration:", duration);
