@@ -130,7 +130,7 @@ const SpellApiService = {
         }
     }
     
-    const duration = spellData.duration.map((d: DurationType) => d.type).join(", ");
+    const duration = spellData.duration ? parseDuration(spellData.duration) : 'Varies';
     const castingTime = spellData.time.map((t: TimeType) => '${t.number} ${t.unit}').join(", ");
     const higherLevelDesc = spellData.entriesHigherLevel?.map((e: HigherLevelEntryType) => e.entries.join("\n")).join("\n") || '';
 
@@ -171,5 +171,14 @@ const SpellApiService = {
     return 'Unknown';
   }
 }
+
+const parseDuration = (durationArray) => {
+  return durationArray.map(d => {
+    if (d.type === 'timed') {
+      return `${d.duration.amount} ${d.duration.type}`;
+    }
+    return d.type;
+  }).join(", ");
+};
 
 export default SpellApiService;
