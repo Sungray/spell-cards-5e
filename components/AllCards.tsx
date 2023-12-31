@@ -14,7 +14,7 @@ function AllCards() {
     const selector = setActiveCardCreator(index);
     return (
       <>
-        { index % 9 === 0 && index > 0 && <div className="pagebreak print:mt-4 print:w-full"></div> }
+        { index % 8 === 0 && index > 0 && <div className="pagebreak print:mt-4 print:w-full"></div> }
         <Card key={c.name} spell={c} select={() => { dispatch(selector) }} remove={() => dispatch(remove(index))} isActive={ false }/>
       </>      
     )
