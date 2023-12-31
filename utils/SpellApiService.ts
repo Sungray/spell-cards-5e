@@ -134,7 +134,7 @@ const SpellApiService = {
         }
     }
     
-    const duration = spellData.duration ? parseDuration(spellData.duration) : 'Varies';
+    const { durationString, isConcentration } = parseDuration(spellData.duration);
     const castingTime = spellData.time.map((t: TimeType) => `${t.number} ${t.unit}`).join(", ");
     const higherLevelDesc = spellData.entriesHigherLevel?.map((e: HigherLevelEntryType) => e.entries.join("\n")).join("\n") || '';
 
@@ -142,7 +142,8 @@ const SpellApiService = {
     console.log("School of Magic:", schoolOfMagicLowerCase);
     console.log("Components:", components);
     console.log("Range:", range);
-    console.log("Duration:", duration);
+    console.log("Duration:", durationString);
+    console.log("Concentration:", isConcentration);
     console.log("Casting Time:", castingTime);
     console.log("Higher Level Description:", higherLevelDesc);
 
@@ -153,10 +154,10 @@ const SpellApiService = {
       desc: spellData.entries.join("\n"),
       higherLevelDesc,
       range,
-      duration,
+      duration: durationString,
+      concentration: isConcentration || false,
       castingTime,
       ritual: spellData.ritual || false,
-      concentration: spellData.concentration || false,
       damageAtCharacterLevel: {}, // This needs specific handling
       components,
       descSize: 9
@@ -177,12 +178,15 @@ const SpellApiService = {
 }
 
 const parseDuration = (durationArray: DurationType[]) => {
-  return durationArray.map(d => {
+  let isConcentration = false;
+  const durationString = durationArray.map(d => {
     if (d.type === 'timed' && d.duration) {
+      isConcentration = d.concentration || false;
       return `${d.duration.amount} ${d.duration.type}`;
     }
     return d.type;
   }).join(", ");
+  return { durationString, isConcentration };
 };
 
 export default SpellApiService;
