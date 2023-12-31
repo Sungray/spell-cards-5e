@@ -149,7 +149,7 @@ const SpellApiService = {
 
     const entries = spellData.entries.map((entry: any) => {
       if (typeof entry === 'object' && entry.type === 'list') {
-        return entry.items.join("\n");
+        return entry.items.map(item => `• ${item}`).join("\n");
       }
       return entry;
     }).join("\n");
