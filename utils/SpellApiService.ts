@@ -111,7 +111,7 @@ const SpellApiService = {
       'D': SchoolOfMagic.divination,
     };
     
-    const schoolOfMagic = schoolMapping[spellData.school as SchoolKey] || SchoolOfMagic.other;
+    const schoolOfMagicLowerCase = (schoolMapping[spellData.school as SchoolKey] || SchoolOfMagic.other).toLowerCase();
 
   
   
@@ -149,7 +149,7 @@ const SpellApiService = {
     const convertedSpell = {
       name: spellData.name,
       level: spellData.level,
-      schoolOfMagic,
+      schoolOfMagic: schoolOfMagicLowerCase as SchoolOfMagic,
       desc: spellData.entries.join("\n"),
       higherLevelDesc,
       range,
