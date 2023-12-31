@@ -100,7 +100,7 @@ const SpellApiService = {
     type SchoolKey = 'T' | 'N' | 'C' | 'A' | 'E' | 'V' | 'I' | 'D';
     
     // School of Magic mapping
-    const schoolMapping = {
+    const schoolMapping: { [key in SchoolKey]: SchoolOfMagic } = {
       'T': SchoolOfMagic.transmutation,
       'N': SchoolOfMagic.necromancy,
       'C': SchoolOfMagic.conjuration,
@@ -111,8 +111,8 @@ const SpellApiService = {
       'D': SchoolOfMagic.divination,
     };
     
-    // Use type assertion when accessing schoolMapping
     const schoolOfMagic = schoolMapping[spellData.school as SchoolKey] || SchoolOfMagic.other;
+
   
   
     // Handling components
