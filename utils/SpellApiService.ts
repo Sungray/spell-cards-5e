@@ -155,7 +155,7 @@ const SpellApiService = {
       higherLevelDesc,
       range,
       duration: durationString,
-      concentration: isConcentration || false,
+      concentration: isConcentration,
       castingTime,
       ritual: spellData.ritual || false,
       damageAtCharacterLevel: {}, // This needs specific handling
