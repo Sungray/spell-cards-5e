@@ -149,7 +149,8 @@ const SpellApiService = {
 
     const entries = spellData.entries.map((entry: any) => {
       if (typeof entry === 'object' && entry.type === 'list') {
-        return entry.items.map(item => `• ${item}`).join("\n");
+        // Add a bullet point before each list item, specifying 'item' as a string
+        return entry.items.map((item: string) => `• ${item}`).join("\n");
       }
       return entry;
     }).join("\n");
