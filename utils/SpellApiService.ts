@@ -18,6 +18,7 @@ interface DurationType {
 interface TimeType {
   number: number;
   unit: string;
+  condition: string;
 }
 
 interface HigherLevelEntryType {
@@ -136,7 +137,7 @@ const SpellApiService = {
     }
     
     const { durationString, isConcentration } = parseDuration(spellData.duration);
-    const castingTime = spellData.time.map((t: TimeType) => `${t.number} ${t.unit}`).join(", ");
+    const castingTime = spellData.time.map((t: TimeType) => `${t.number} ${t.condition} ${t.unit}`).join(", ");
     const higherLevelDesc = spellData.entriesHigherLevel?.map((e: HigherLevelEntryType) => e.entries.join("\n")).join("\n") || '';
 
     console.log("Converting spell:", spellData.name);
