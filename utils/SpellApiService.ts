@@ -8,7 +8,10 @@ type SrdSpellsReponse = {
 
 interface DurationType {
   type: string;
-  // Add other properties of duration objects if there are any
+  duration?: {
+    amount: number;
+    type: string;
+  };
 }
 
 interface TimeType {
@@ -172,9 +175,9 @@ const SpellApiService = {
   }
 }
 
-const parseDuration = (durationArray) => {
+const parseDuration = (durationArray: DurationType[]) => {
   return durationArray.map(d => {
-    if (d.type === 'timed') {
+    if (d.type === 'timed' && d.duration) {
       return `${d.duration.amount} ${d.duration.type}`;
     }
     return d.type;
