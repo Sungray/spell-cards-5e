@@ -36,7 +36,12 @@ export default function handler(req, res) {
   const customSpellsDir = path.join('/usr/src/app', 'custom-spells');
 
   // Read spells
-  const spells = [...readSpellsFromDirectory(spellsDir), ...readSpellsFromDirectory(customSpellsDir)];
+  let spells = [];
+
+  if (process.env.USE_DOWNLOADED_FOLDER === 'true') {
+    spells = [...spells, ...readSpellsFromDirectory(spellsDir)];
+  }
+  spells = [...spells, ...readSpellsFromDirectory(customSpellsDir)];
 
   // Get the spell index from the URL
   const { index } = req.query;
