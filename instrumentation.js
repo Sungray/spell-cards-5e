@@ -35,5 +35,8 @@ async function downloadSpellsData() {
   }
 }
 
-// Export the async function as required by Next.js instrumentation
-exports.register = downloadSpellsData;
+export async function register() {
+    if (process.env.NEXT_RUNTIME === 'nodejs') {
+        await downloadSpellsData();
+    }
+}
