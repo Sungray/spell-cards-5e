@@ -31,7 +31,13 @@ const readSpellsFromDirectory = (dirPath) => {
 export default function handler(req, res) {
   const spellsDir = path.join('/usr/src/app', 'spells');
   const customSpellsDir = path.join('/usr/src/app', 'custom-spells');
-  const spells = [...readSpellsFromDirectory(spellsDir), ...readSpellsFromDirectory(customSpellsDir)];
+  
+  let spells = [];
+
+  if (process.env.USE_DOWNLOADED_FOLDER === 'true') {
+    spells = [...spells, ...readSpellsFromDirectory(spellsDir)];
+  }
+  spells = [...spells, ...readSpellsFromDirectory(customSpellsDir)];
 
   // Format the response to include count and results
   const formattedResponse = {
