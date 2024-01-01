@@ -38,20 +38,16 @@ const SpellApiService = {
     const apiUrl = config.USE_5ETOOLS === 'true' ? '/api/spells' : `${config.API_URL}api/spells`;
     const response = await fetch(apiUrl);
     const data = await response.json();
-    console.log("API Response for getList:", data); // Log the response data
     return data;
   },
 
   get: async (spellName: string): Promise<SpellType> => {
-    console.log("API Response for spell: ", spellName);  // Log the response data
     const config = await getConfig();
     const apiUrl = config.USE_5ETOOLS === 'true'
       ? `/api/spells/${spellName.toLowerCase().replace(/\s+/g, '-')}`
       : `${config.API_URL}api/spells/${spellName}`;
-    console.log("Calling API: ", apiUrl);  // Log the response data
     const response = await fetch(apiUrl);
     const data = await response.json();
-    console.log("API Response for get:", data);  // Log the response data
     return config.USE_5ETOOLS === 'true' ? SpellApiService.convert5eToolSpell(data) : SpellApiService.convert(data);
   },
   
@@ -159,22 +155,6 @@ const SpellApiService = {
       }
       return timeString.trim();
     }).join(", ");
-    
-    /*const entries = spellData.entries.map((entry: any) => {
-      if (typeof entry === 'object' && entry.type === 'list') {
-        return entry.items.map((item: string) => `• ${item}`).join("\n");
-      }
-      return entry;
-    }).join("\n");*/
-
-    console.log("Converting spell:", spellData.name);
-    console.log("School of Magic:", schoolOfMagicLowerCase);
-    console.log("Components:", components);
-    console.log("Range:", range);
-    console.log("Duration:", durationString);
-    console.log("Concentration:", isConcentration);
-    console.log("Casting Time:", castingTime);
-    console.log("Higher Level Description:", higherLevelDesc);
 
     const convertedSpell = {
       name: spellData.name,
@@ -191,8 +171,7 @@ const SpellApiService = {
       components,
       descSize: 9
     };
-
-    console.log("Converted Spell:", convertedSpell);
+    
     return convertedSpell;
 
   },
