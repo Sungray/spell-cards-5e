@@ -12,6 +12,6 @@ Many thanks to [DnD5eAPI](https://www.dnd5eapi.co/), [Game Icons](https://game-i
 
 In order to run this image, simply execute:
 
-docker run -p 3000:3000 -e 5E_API='http://5e-api-ip/' ghcr.io/cedlap/spell-cards-5e:latest
+docker run -p 3000:3000 -e 5E_API='http://5e-api-ip/' ghcr.io/sungray/spell-cards-5e:latest
 
 The 5E_API env variable is optional and will default to 'https://www.dnd5eapi.co/'.
