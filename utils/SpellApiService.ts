@@ -35,7 +35,7 @@ const SpellApiService = {
 
   getList: async (): Promise<SrdSpellsReponse> => {
     const config = await getConfig();
-    const apiUrl = config.USE_5ETOOLS === 'true' ? '/api/spells' : `${config.API_URL}api/spells`;
+    const apiUrl = config.USE_LOCAL_FILES === 'true' ? '/api/spells' : `${config.API_URL}api/spells`;
     const response = await fetch(apiUrl);
     const data = await response.json();
     return data;
@@ -43,12 +43,12 @@ const SpellApiService = {
 
   get: async (spellName: string): Promise<SpellType> => {
     const config = await getConfig();
-    const apiUrl = config.USE_5ETOOLS === 'true'
+    const apiUrl = config.USE_LOCAL_FILES === 'true'
       ? `/api/spells/${spellName.toLowerCase().replace(/\s+/g, '-')}`
       : `${config.API_URL}api/spells/${spellName}`;
     const response = await fetch(apiUrl);
     const data = await response.json();
-    return config.USE_5ETOOLS === 'true' ? SpellApiService.convert5eToolSpell(data) : SpellApiService.convert(data);
+    return config.USE_LOCAL_FILES === 'true' ? SpellApiService.convert5eToolSpell(data) : SpellApiService.convert(data);
   },
   
   convertDamagePerLevel: (apiResponse: Record<string, any>): Record<number, string> => {
