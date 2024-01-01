@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   experimental: {
-    instrumentation: true,
+    instrumentationHook: true,
   },
 }
 
