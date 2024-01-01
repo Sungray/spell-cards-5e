@@ -4,6 +4,13 @@ const util = require('util');
 const execAsync = util.promisify(exec);
 
 async function downloadSpellsData() {
+  const spellsDir = '/usr/src/app/spells';
+
+  // Ensure the spells directory exists
+  if (!fs.existsSync(spellsDir)) {
+    await mkdirAsync(spellsDir, { recursive: true });
+  }
+  
   const repoUrl = process.env.JSON_REPO;
   if (!repoUrl) {
     console.log('JSON_REPO environment variable is not set. Skipping download.');
