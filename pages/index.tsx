@@ -12,15 +12,25 @@ import { initCards } from "../stores/cardsReducer";
 
 function App() {
   const [allSrdSpells, setAllSrdSpells] = useState<SrdType[]>([]);
+  const [showCredits, setShowCredits] = useState(true); // default to true
   const dispatch = useAppDispatch();
-
   const activeCard = useAppSelector((state) => state.ui.activeCard);
 
   useEffect(() => {
     if(typeof window !== 'undefined') {
-      dispatch(initCards(JSON.parse(localStorage.getItem("cards") || "[]")))
+      dispatch(initCards(JSON.parse(localStorage.getItem("cards") || "[]")));
+
+      // Fetch the config data
+      fetch('/api/config')
+        .then((res) => res.json())
+        .then((config) => {
+          if (config.SHOW_CREDITS !== undefined) {
+            setShowCredits(config.SHOW_CREDITS === 'true');
+          }
+        })
+        .catch((error) => console.error('Failed to fetch config:', error));
     } 
-  });
+  }, [dispatch]);
 
   const appDescription = "Generating printable PDFs of your DnD spell cards, with an SRD API and CSS! Wow I love acronyms.";
 
@@ -51,29 +61,33 @@ function App() {
         <OneCard/>
       }
 
-      <h2 className="text-lg mt-12 print:hidden font-mono">Brought to you by:</h2>
-      <ul className="text-sm print:hidden list-disc ml-5">
-        <li>
-          <a className="text-blue-600 hover:text-blue-900" href="https://clarabdevelopment.com">Clara B Development</a> (i.e. me, Clara)
-        </li>
-        <li>
-          With help from the <a className="text-blue-600 hover:text-blue-900" href="https://www.dnd5eapi.co/">DnD 5e API</a>
-        </li>
-        <li>
-          And icons from <a className="text-blue-600 hover:text-blue-900" href="https://game-icons.net/">game-icons.net</a>
-        </li>
-        <li>
-          Code available on <a className="text-blue-600 hover:text-blue-900" href="https://github.com/csb324/spell-cards-5e">github</a>
-        </li>
-
-        <li>
-          <span className="text-xs">
-            <a className="text-blue-600 hover:text-blue-900" rel="me" href="https://mstdn.party/@clarabellum">I&rsquo;m also on mastodon</a> and <a className="text-blue-600 hover:text-blue-900" rel="me" href="https://twitter.com/clarabellum">twitter</a>
-          </span>
-
-        </li>
-
-      </ul>
+      {showCredits && (
+        <div>
+          <h2 className="text-lg mt-12 print:hidden font-mono">Brought to you by:</h2>
+          <ul className="text-sm print:hidden list-disc ml-5">
+            <li>
+              <a className="text-blue-600 hover:text-blue-900" href="https://clarabdevelopment.com">Clara B Development</a> (i.e. me, Clara)
+            </li>
+            <li>
+              With help from the <a className="text-blue-600 hover:text-blue-900" href="https://www.dnd5eapi.co/">DnD 5e API</a>
+            </li>
+            <li>
+              And icons from <a className="text-blue-600 hover:text-blue-900" href="https://game-icons.net/">game-icons.net</a>
+            </li>
+            <li>
+              Code available on <a className="text-blue-600 hover:text-blue-900" href="https://github.com/csb324/spell-cards-5e">github</a>
+            </li>
+    
+            <li>
+              <span className="text-xs">
+                <a className="text-blue-600 hover:text-blue-900" rel="me" href="https://mstdn.party/@clarabellum">I&rsquo;m also on mastodon</a> and <a className="text-blue-600 hover:text-blue-900" rel="me" href="https://twitter.com/clarabellum">twitter</a>
+              </span>
+    
+            </li>
+    
+          </ul>
+        </div>
+    )}
     </div>
   )
 }
