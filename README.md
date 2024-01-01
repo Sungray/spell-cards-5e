@@ -12,20 +12,20 @@ Many thanks to [DnD5eAPI](https://www.dnd5eapi.co/), [Game Icons](https://game-i
 
 In order to run this image, simply execute:
 
-docker run -p 3000:3000 ghcr.io/sungray/spell-cards-5e:latest
-
-The 5E_API env variable is optional and will default to 'https://www.dnd5eapi.co/'.
-
-You can also add -e USE_LOCAL_FILES = true to use your own collection of json files instead. Use -v /your/json/spell/folder:/usr/src/app/custom-spells and there you can add your own collection of json files.
+`docker run -p 3000:3000 ghcr.io/sungray/spell-cards-5e:latest`
 
 There are a few optional environment variables you can use:
- -e 5E_API = 'http://5e-api-ip/'
-   replace the API endpoint. Will default to 'https://www.dnd5eapi.co/'.
+
+`-e 5E_API = 'http://5e-api-ip/'`
+
+replace the API endpoint. Will default to 'https://www.dnd5eapi.co/'.
  
- -e USE_LOCAL_FILES = true
-   use your own collection of json files instead. Below is an example of how the json should be structured. The json file names should start with spells- and end with .json.
+`-e USE_LOCAL_FILES = true`
+ 
+ use your own collection of json files instead. Below is an example of how the json should be structured. The json file names should start with spells- and end with .json.
 The custom spells will be looked up in the /usr/src/app/custom-spells, so it is recommended to mount that as a volume.
--v /your/json/spell/folder:/usr/src/app/custom-spells
+
+`-v /your/json/spell/folder:/usr/src/app/custom-spells`
 
 For instance, spells-custom.json :
 
