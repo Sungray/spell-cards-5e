@@ -16,4 +16,4 @@ docker run -p 3000:3000 -e 5E_API='http://5e-api-ip/' ghcr.io/sungray/spell-card
 
 The 5E_API env variable is optional and will default to 'https://www.dnd5eapi.co/'.
 
-You can also add -e USE_LOCAL_FILES = true to use your own collection of json files. Use -v /your/json/spell/folder:/usr/src/app/custom-spells and there you can add your own collection of json files.
+You can also add -e USE_LOCAL_FILES = true to use your own collection of json files instead. Use -v /your/json/spell/folder:/usr/src/app/custom-spells and there you can add your own collection of json files.
