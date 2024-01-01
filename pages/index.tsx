@@ -17,19 +17,18 @@ function App() {
   const activeCard = useAppSelector((state) => state.ui.activeCard);
 
   useEffect(() => {
-    if(typeof window !== 'undefined') {
+    if (typeof window !== 'undefined') {
       dispatch(initCards(JSON.parse(localStorage.getItem("cards") || "[]")));
 
       // Fetch the config data
       fetch('/api/config')
         .then((res) => res.json())
         .then((config) => {
-          if (config.SHOW_CREDITS !== undefined) {
-            setShowCredits(config.SHOW_CREDITS === 'true');
-          }
+          // Display credits unless SHOW_CREDITS is explicitly 'false'
+          setShowCredits(config.SHOW_CREDITS !== 'false');
         })
         .catch((error) => console.error('Failed to fetch config:', error));
-    } 
+    }
   }, [dispatch]);
 
   const appDescription = "Generating printable PDFs of your DnD spell cards, with an SRD API and CSS! Wow I love acronyms.";
