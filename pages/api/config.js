@@ -6,6 +6,7 @@ export default function handler(req, res) {
 
   res.status(200).json({
     USE_LOCAL_FILES: process.env.USE_LOCAL_FILES,
-    API_URL: apiUrlWithSlash
+    API_URL: apiUrlWithSlash,
+    SHOW_CREDITS: process.env.SHOW_CREDITS
   });
 }
