@@ -1,7 +1,10 @@
 const { exec } = require('child_process');
 const util = require('util');
+const fs = require('fs');
+const path = require('path');
 
 const execAsync = util.promisify(exec);
+const mkdirAsync = util.promisify(fs.mkdir);
 
 async function downloadSpellsData() {
   const spellsDir = '/usr/src/app/spells';
@@ -10,7 +13,7 @@ async function downloadSpellsData() {
   if (!fs.existsSync(spellsDir)) {
     await mkdirAsync(spellsDir, { recursive: true });
   }
-  
+
   const repoUrl = process.env.JSON_REPO;
   if (!repoUrl) {
     console.log('JSON_REPO environment variable is not set. Skipping download.');
@@ -28,6 +31,9 @@ async function downloadSpellsData() {
   }
 }
 
-if (process.env.NEXT_RUNTIME === 'nodejs') {
-  downloadSpellsData();
-}
+// Export the async function as required by Next.js instrumentation
+exports.register = async () => {
+  if (process.env.NEXT_RUNTIME === 'nodejs') {
+    await downloadSpellsData();
+  }
+};
