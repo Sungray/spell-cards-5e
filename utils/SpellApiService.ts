@@ -113,14 +113,6 @@ const SpellApiService = {
 
   
   
-    // Handling components
-    const components = {
-      verbal: spellData.components.v || false,
-      somatic: spellData.components.s || false,
-      material: spellData.components.m ? true : false,
-      materialDesc: spellData.components.m || ''
-    };
-  
     // Convert range, duration, casting time
     let range = 'Varies';
     if (spellData.range) {
@@ -155,6 +147,28 @@ const SpellApiService = {
       }
       return timeString.trim();
     }).join(", ");
+
+    // Handling components
+    const parseMaterialComponent = (material: any): string => {
+      if (typeof material === 'string') {
+        return material;
+      }
+      // Handle the case where material is an object with 'text' and possibly 'cost'
+      let materialDescription = material.text || '';
+      if (material.cost) {
+        const costInGp = material.cost / 100; // Assuming the cost is in cents
+        materialDescription += ` (Cost: ${costInGp} gp)`;
+      }
+      return materialDescription;
+    };
+
+    const components = {
+      verbal: spellData.components.v || false,
+      somatic: spellData.components.s || false,
+      material: !!spellData.components.m,
+      materialDesc: parseMaterialComponent(spellData.components.m)
+    };
+
 
     const convertedSpell = {
       name: spellData.name,
