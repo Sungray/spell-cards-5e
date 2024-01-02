@@ -2,7 +2,7 @@
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-It is forked from https://github.com/csb324/spell-cards-5e. The point of this fork is to dockerize it and allow the use of a local 5e api.
+It is forked from https://github.com/csb324/spell-cards-5e. The point of this fork is to dockerize it and allow the use of a local 5e api or a local json library of custom spells.
 
 # [DnD Spell Cards](https://dndspellcards.com/)
 
