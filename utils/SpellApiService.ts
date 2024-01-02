@@ -155,12 +155,14 @@ const SpellApiService = {
       }
       // Handle the case where material is an object with 'text' and possibly 'cost'
       let materialDescription = material.text || '';
-      if (material.cost) {
+      if (material.hasOwnProperty('cost') && material.cost) {
         const costInGp = material.cost / 100; // Assuming the cost is in cents
         materialDescription += ` (Cost: ${costInGp} gp)`;
       }
       return materialDescription;
     };
+
+    
 
     const components = {
       verbal: spellData.components.v || false,
