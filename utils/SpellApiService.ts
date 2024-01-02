@@ -134,12 +134,15 @@ const SpellApiService = {
       return text.replace(/\{@.*? (.*?)\}/g, '$1');
     };
   
-   const processEntries = (entry: any): string => {
+    const processEntries = (entry: any): string => {
       if (typeof entry === 'object' && entry.type === 'list') {
         return entry.items.map((item: string) => `• ${replaceSpecialTags(item)}`).join("\n");
       }
       else if (typeof entry === 'object' && entry.type === 'entries') {
         return `**${entry.name}**\n${entry.entries.map((subEntry: any) => processEntries(subEntry)).join("\n")}`;
+      }
+      else if (typeof entry === 'object' && entry.type === 'quote') {
+        return `> ${entry.entries.map((subEntry: string) => replaceSpecialTags(subEntry)).join("\n")}\n\n— ${entry.by}`;
       }
       return replaceSpecialTags(entry);
     };
