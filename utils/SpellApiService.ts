@@ -13,6 +13,7 @@ interface DurationType {
     type: string;
   };
   concentration?: boolean; // Add this line
+  ends: string[];
 }
 
 interface TimeType {
