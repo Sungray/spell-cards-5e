@@ -134,12 +134,17 @@ const SpellApiService = {
       return text.replace(/\{@.*? (.*?)\}/g, '$1');
     };
   
-    const entries = spellData.entries.map((entry: any) => {
+   const processEntries = (entry: any): string => {
       if (typeof entry === 'object' && entry.type === 'list') {
         return entry.items.map((item: string) => `• ${replaceSpecialTags(item)}`).join("\n");
       }
+      else if (typeof entry === 'object' && entry.type === 'entries') {
+        return `**${entry.name}**\n${entry.entries.map((subEntry: any) => processEntries(subEntry)).join("\n")}`;
+      }
       return replaceSpecialTags(entry);
-    }).join("\n");
+    };
+    
+    const entries = spellData.entries.map((entry: any) => processEntries(entry)).join("\n");
     
     const castingTime = spellData.time.map((t: TimeType) => {
       let timeString = `${t.number || ''} ${t.unit || ''}`;
