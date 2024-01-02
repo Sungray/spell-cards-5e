@@ -150,6 +150,9 @@ const SpellApiService = {
 
     // Handling components
     const parseMaterialComponent = (material: any): string => {
+      if (!material) {
+        return '';  // Return an empty string if material is undefined or null
+      }
       if (typeof material === 'string') {
         return material;
       }
