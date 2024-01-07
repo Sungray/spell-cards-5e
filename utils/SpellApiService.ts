@@ -128,9 +128,10 @@ const SpellApiService = {
     const { durationString, isConcentration } = parseDuration(spellData.duration);
 
     const replaceSpecialTags = (text: string): string => {
-      // First replace {@scaledamage} tags
-      text = text.replace(/\{@scaledamage \d+d\d+\|\d+-\d+\|(.+?)\}/g, (match, p1) => {
-        return p1.split('|').pop(); // Extract and return the last part
+      // First target the {@scaledamage} tags
+      text = text.replace(/\{@scaledamage.*?\|(.+?)\}/g, (match, p1) => {
+        // Split the captured group at '|' and return the last value
+        return p1.split('|').pop();
       });
     
       // Then replace other {@tag content} patterns
