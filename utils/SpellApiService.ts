@@ -129,7 +129,7 @@ const SpellApiService = {
 
     const replaceSpecialTags = (text: string): string => {
       // Specifically handle the @scaledamage tag
-      text = text.replace(/\{@scaledamage [^\|]*\|[\d\-]*\|([^\}]*)\}/g, '$1');
+      text = text.replace(/\{@scaledamage \d+d\d+\|\d+-\d+\|(.*?)\}/g, '$1');
     
       // Replace other {@tag content} patterns
       text = text.replace(/\{@.*? (.*?)\}/g, '$1');
