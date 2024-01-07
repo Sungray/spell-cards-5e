@@ -131,11 +131,12 @@ const SpellApiService = {
       // Replace {@tag content} with 'content'
       text = text.replace(/\{@.*? (.*?)\}/g, '$1');
     
-      // Handle the {@scaledamage} tag specifically
+      // Specifically handle the {@scaledamage} tag
       text = text.replace(/\{@scaledamage \d+d\d+\|\d+-\d+\|(.*?)\}/g, '$1');
     
       return text;
     };
+
 
     const higherLevelDesc = spellData.entriesHigherLevel?.map((e: HigherLevelEntryType) => {
       return e.entries.map(entry => replaceSpecialTags(entry)).join("\n");
