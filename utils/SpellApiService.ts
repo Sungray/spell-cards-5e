@@ -135,7 +135,7 @@ const SpellApiService = {
       });
     
       // Replace other {@tag content} patterns
-      //text = text.replace(/\{@.*? (.*?)\}/g, '$1');
+      text = text.replace(/\{@.*? (.*?)\}/g, '$1');
     
       return text;
     };
