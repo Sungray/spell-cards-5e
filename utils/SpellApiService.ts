@@ -132,8 +132,8 @@ const SpellApiService = {
       text = text.replace(/\{@.*? (.*?)\}/g, '$1');
     
       // Specifically handle the {@scaledamage} tag
-      // This regex captures the last segment after the last '|' in the {@scaledamage} tag
-      text = text.replace(/\{@scaledamage [^\|]*\|([^\|]*)\}/g, '$1');
+      // This regex captures the segment after the last '|' in the {@scaledamage} tag
+      text = text.replace(/\{@scaledamage.*?\|([^\|]+)\}/g, '$1');
     
       return text;
     };
