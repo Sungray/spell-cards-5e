@@ -127,12 +127,20 @@ const SpellApiService = {
     
     const { durationString, isConcentration } = parseDuration(spellData.duration);
 
-    const higherLevelDesc = spellData.entriesHigherLevel?.map((e: HigherLevelEntryType) => e.entries.join("\n")).join("\n") || '';
-
     const replaceSpecialTags = (text: string): string => {
       // Replace {@tag content} with 'content'
-      return text.replace(/\{@.*? (.*?)\}/g, '$1');
+      text = text.replace(/\{@.*? (.*?)\}/g, '$1');
+    
+      // Handle the {@scaledamage} tag specifically
+      text = text.replace(/\{@scaledamage \d+d\d+\|\d+-\d+\|(.*?)\}/g, '$1');
+    
+      return text;
     };
+
+    const higherLevelDesc = spellData.entriesHigherLevel?.map((e: HigherLevelEntryType) => {
+      return e.entries.map(entry => replaceSpecialTags(entry)).join("\n");
+    }).join("\n") || '';
+
   
     const processEntries = (entry: any): string => {
       if (typeof entry === 'object' && entry.type === 'list') {
