@@ -132,11 +132,11 @@ const SpellApiService = {
       text = text.replace(/\{@.*? (.*?)\}/g, '$1');
     
       // Specifically handle the {@scaledamage} tag
-      text = text.replace(/\{@scaledamage \d+d\d+\|\d+-\d+\|(.*?)\}/g, '$1');
+      // This regex looks for {@scaledamage}, followed by anything until the last '|', and captures what follows after the last '|'
+      text = text.replace(/\{@scaledamage .*?\|.*?\|(.*?)\}/g, '$1');
     
       return text;
     };
-
 
     const higherLevelDesc = spellData.entriesHigherLevel?.map((e: HigherLevelEntryType) => {
       return e.entries.map(entry => replaceSpecialTags(entry)).join("\n");
