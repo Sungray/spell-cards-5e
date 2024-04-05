@@ -29,7 +29,13 @@ interface HigherLevelEntryType {
 interface Entry {
   type: string;
   items?: string[];
+  caption?: string;
+  colLabels?: string[];
+  rows?: (string[])[];
+  by?: string;
+  // Add other properties as needed
 }
+
 
 
 
