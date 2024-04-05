@@ -144,18 +144,24 @@ const SpellApiService = {
       return e.entries.map(entry => replaceSpecialTags(entry)).join("\n");
     }).join("\n") || '';
   
-    const processEntries = (entry: any): string => {
-      if (typeof entry === 'object' && entry.type === 'list') {
-        return entry.items.map((item: string) => `• ${replaceSpecialTags(item)}`).join("\n");
+    const processEntries = (entry) => {
+      if (typeof entry === 'object') {
+        if (entry.type === 'list') {
+          return entry.items.map((item) => `• ${item}`).join("\n");
+        } else if (entry.type === 'table') {
+          // Assuming colLabels are like ['d4', 'Effect'] and you want to display them
+          let tableString = entry.caption ? `**${entry.caption}**\n` : '';
+          tableString += entry.colLabels.join(" | ") + "\n";
+          entry.rows.forEach(row => {
+            tableString += row.join(" | ") + "\n";
+          });
+          return tableString;
+        }
+        // Handle other types ('quote', etc.) similarly
       }
-      else if (typeof entry === 'object' && entry.type === 'entries') {
-        return `**${entry.name}**\n${entry.entries.map((subEntry: any) => processEntries(subEntry)).join("\n")}`;
-      }
-      else if (typeof entry === 'object' && entry.type === 'quote') {
-        return `> ${entry.entries.map((subEntry: string) => replaceSpecialTags(subEntry)).join("\n")}\n\n— ${entry.by}`;
-      }
-      return replaceSpecialTags(entry);
+      return entry; // Return the entry directly if it's not an object or an unhandled type
     };
+
     
     const entries = spellData.entries.map((entry: any) => processEntries(entry)).join("\n");
     
