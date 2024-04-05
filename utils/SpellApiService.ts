@@ -29,7 +29,6 @@ interface HigherLevelEntryType {
 interface Entry {
   type: string;
   items?: string[];
-  // Define other properties that an entry might have
 }
 
 
@@ -151,23 +150,24 @@ const SpellApiService = {
       return e.entries.map(entry => replaceSpecialTags(entry)).join("\n");
     }).join("\n") || '';
   
-    const processEntries = (entry: Entry) => {
+    const processEntries = (entry) => {
       if (typeof entry === 'object') {
         if (entry.type === 'list') {
-          return entry.items.map((item) => `• ${item}`).join("\n");
+          return entry.items?.map((item) => `• ${replaceSpecialTags(item)}`).join("\n");
         } else if (entry.type === 'table') {
-          // Assuming colLabels are like ['d4', 'Effect'] and you want to display them
           let tableString = entry.caption ? `**${entry.caption}**\n` : '';
-          tableString += entry.colLabels.join(" | ") + "\n";
-          entry.rows.forEach(row => {
-            tableString += row.join(" | ") + "\n";
+          tableString += entry.colLabels?.join(" | ") + "\n" + '-'.repeat(20) + "\n"; // Assuming you have colLabels
+          entry.rows?.forEach(row => {
+            const formattedRow = row.map(cell => replaceSpecialTags(cell)).join(" | ");
+            tableString += formattedRow + "\n";
           });
           return tableString;
         }
-        // Handle other types ('quote', etc.) similarly
+        // Add handling for other types like 'quote' here
       }
-      return entry; // Return the entry directly if it's not an object or an unhandled type
+      return typeof entry === 'string' ? replaceSpecialTags(entry) : '';
     };
+
 
     
     const entries = spellData.entries.map((entry: any) => processEntries(entry)).join("\n");
