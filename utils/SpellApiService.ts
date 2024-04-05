@@ -150,7 +150,7 @@ const SpellApiService = {
       return e.entries.map(entry => replaceSpecialTags(entry)).join("\n");
     }).join("\n") || '';
   
-    const processEntries = (entry) => {
+    const processEntries = (entry: Entry) => {
       if (typeof entry === 'object') {
         if (entry.type === 'list') {
           return entry.items?.map((item) => `• ${replaceSpecialTags(item)}`).join("\n");
