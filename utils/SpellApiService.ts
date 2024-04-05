@@ -26,6 +26,13 @@ interface HigherLevelEntryType {
   entries: string[];
 }
 
+interface Entry {
+  type: string;
+  items?: string[];
+  // Define other properties that an entry might have
+}
+
+
 
 const getConfig = async () => {
   const response = await fetch('/api/config');
@@ -144,7 +151,7 @@ const SpellApiService = {
       return e.entries.map(entry => replaceSpecialTags(entry)).join("\n");
     }).join("\n") || '';
   
-    const processEntries = (entry) => {
+    const processEntries = (entry: Entry) => {
       if (typeof entry === 'object') {
         if (entry.type === 'list') {
           return entry.items.map((item) => `• ${item}`).join("\n");
